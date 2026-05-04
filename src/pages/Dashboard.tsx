@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { LogOut, ExternalLink, Clock, Camera, Image as ImageIcon } from 'lucide-react'
 import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
+import { AdminDashboard } from './admin/AdminDashboard'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import {
   Dialog,
@@ -29,7 +30,7 @@ type Ponto = {
 const PONTOS_ORDER = ['Entrada', 'Saída Almoço', 'Retorno Almoço', 'Saida']
 
 export default function Dashboard() {
-  const { user, signOut } = useAuth()
+  const { user, signOut, isAdmin } = useAuth()
   const navigate = useNavigate()
   const { toast } = useToast()
 
@@ -347,6 +348,10 @@ export default function Dashboard() {
   }
 
   const nextType = getNextPontoType()
+
+  if (isAdmin) {
+    return <AdminDashboard />
+  }
 
   return (
     <div className="min-h-screen bg-muted/30 pb-20 flex flex-col font-sans">

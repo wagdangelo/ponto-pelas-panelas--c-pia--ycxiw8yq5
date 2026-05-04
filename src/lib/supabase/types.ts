@@ -107,45 +107,66 @@ export type Database = {
       }
       pontos: {
         Row: {
-          created_at: string | null
+          criado_em: string | null
           data: string | null
           data_hora: string | null
+          entrada: string | null
           foto: string | null
+          foto_url: string | null
           funcionario_id: string | null
           horario: string | null
           id: string
+          latitude: number | null
           localizacao: Json | null
+          longitude: number | null
+          nsr: number
+          status_validacao: string | null
           tipo_ponto: string | null
           updated_at: string | null
           user_id: string | null
+          wifi_conectado: boolean | null
           wifi_validado: boolean | null
         }
         Insert: {
-          created_at?: string | null
+          criado_em?: string | null
           data?: string | null
           data_hora?: string | null
+          entrada?: string | null
           foto?: string | null
+          foto_url?: string | null
           funcionario_id?: string | null
           horario?: string | null
           id?: string
+          latitude?: number | null
           localizacao?: Json | null
+          longitude?: number | null
+          nsr?: number
+          status_validacao?: string | null
           tipo_ponto?: string | null
           updated_at?: string | null
           user_id?: string | null
+          wifi_conectado?: boolean | null
           wifi_validado?: boolean | null
         }
         Update: {
-          created_at?: string | null
+          criado_em?: string | null
           data?: string | null
           data_hora?: string | null
+          entrada?: string | null
           foto?: string | null
+          foto_url?: string | null
           funcionario_id?: string | null
           horario?: string | null
           id?: string
+          latitude?: number | null
           localizacao?: Json | null
+          longitude?: number | null
+          nsr?: number
+          status_validacao?: string | null
           tipo_ponto?: string | null
           updated_at?: string | null
           user_id?: string | null
+          wifi_conectado?: boolean | null
           wifi_validado?: boolean | null
         }
         Relationships: [
@@ -412,8 +433,15 @@ export const Constants = {
 //   foto: text (nullable)
 //   localizacao: jsonb (nullable)
 //   wifi_validado: boolean (nullable)
-//   created_at: timestamp with time zone (nullable, default: now())
+//   criado_em: timestamp with time zone (nullable, default: now())
 //   updated_at: timestamp with time zone (nullable, default: now())
+//   entrada: text (nullable)
+//   foto_url: text (nullable)
+//   latitude: double precision (nullable)
+//   longitude: double precision (nullable)
+//   status_validacao: text (nullable)
+//   wifi_conectado: boolean (nullable)
+//   nsr: bigint (not null, default: nextval('pontos_nsr_seq'::regclass))
 // Table: punch_adjustments
 //   id: uuid (not null, default: gen_random_uuid())
 //   user_id: uuid (nullable)
@@ -441,6 +469,7 @@ export const Constants = {
 //   PRIMARY KEY funcionarios_pkey: PRIMARY KEY (id)
 // Table: pontos
 //   FOREIGN KEY pontos_funcionario_id_fkey: FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id) ON DELETE CASCADE
+//   UNIQUE pontos_nsr_key: UNIQUE (nsr)
 //   PRIMARY KEY pontos_pkey: PRIMARY KEY (id)
 //   FOREIGN KEY pontos_user_id_fkey: FOREIGN KEY (user_id) REFERENCES funcionarios(id) ON DELETE CASCADE
 // Table: punch_adjustments
@@ -535,5 +564,7 @@ export const Constants = {
 // --- INDEXES ---
 // Table: funcionarios
 //   CREATE UNIQUE INDEX funcionarios_email_key ON public.funcionarios USING btree (email)
+// Table: pontos
+//   CREATE UNIQUE INDEX pontos_nsr_key ON public.pontos USING btree (nsr)
 // Table: punch_adjustments
 //   CREATE UNIQUE INDEX punch_adjustments_nsr_key ON public.punch_adjustments USING btree (nsr)
