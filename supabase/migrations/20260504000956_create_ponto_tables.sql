@@ -11,7 +11,7 @@ AS $$
   SELECT EXISTS (
     SELECT 1 FROM funcionarios WHERE id = auth.uid() AND role IN ('admin', 'gerente', 'Admin', 'Gerente')
   );
-$;
+$$;
 
 -- 1. funcionarios
 CREATE TABLE IF NOT EXISTS public.funcionarios (
