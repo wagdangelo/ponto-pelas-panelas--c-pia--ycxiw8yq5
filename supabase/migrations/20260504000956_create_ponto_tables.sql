@@ -1,18 +1,5 @@
 -- Migration for Ponto Pelas Panelas
 
--- Create is_user_admin function first so we can use it in policies
--- Uses SECURITY DEFINER to bypass RLS and prevent infinite recursion
-CREATE OR REPLACE FUNCTION public.is_user_admin()
-RETURNS BOOLEAN
-LANGUAGE sql
-SECURITY DEFINER
-SET search_path = public
-AS $$
-  SELECT EXISTS (
-    SELECT 1 FROM funcionarios WHERE id = auth.uid() AND role IN ('admin', 'gerente', 'Admin', 'Gerente')
-  );
-$$;
-
 -- 1. funcionarios
 CREATE TABLE IF NOT EXISTS public.funcionarios (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -44,6 +31,19 @@ ALTER TABLE public.funcionarios ADD COLUMN IF NOT EXISTS data_admissao DATE;
 ALTER TABLE public.funcionarios ADD COLUMN IF NOT EXISTS ativo BOOLEAN DEFAULT true;
 ALTER TABLE public.funcionarios ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT now();
 ALTER TABLE public.funcionarios ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT now();
+
+-- Create is_user_admin function so we can use it in policies
+-- Uses SECURITY DEFINER to bypass RLS and prevent infinite recursion
+CREATE OR REPLACE FUNCTION public.is_user_admin()
+RETURNS BOOLEAN
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM funcionarios WHERE id = auth.uid() AND role IN ('admin', 'gerente', 'Admin', 'Gerente')
+  );
+$$;
 
 -- 2. pontos
 CREATE TABLE IF NOT EXISTS public.pontos (
