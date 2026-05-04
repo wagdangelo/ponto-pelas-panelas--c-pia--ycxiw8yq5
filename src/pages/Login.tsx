@@ -130,13 +130,13 @@ export default function Login() {
     let isUserAdmin = false
     try {
       const { data: role } = await supabase.rpc('get_user_role_by_email', { p_email: email })
-      isUserAdmin = ['Admin', 'Gerente', 'admin', 'gerente'].includes(role || '')
+      isUserAdmin = ['Admin', 'admin'].includes(role || '') // ← MUDE AQUI
     } catch (err) {
       console.error('Error fetching user role:', err)
     }
 
     if (isUserAdmin) {
-      await proceedToAuth(true)
+      await proceedToAuth(true) // Admin pula validação
     } else {
       if (!navigator.geolocation) {
         setStatus('error')
@@ -150,7 +150,7 @@ export default function Login() {
           const distance = getDistanceInMeters(latitude, longitude, TARGET_LAT, TARGET_LNG)
 
           if (distance <= MAX_DISTANCE_METERS) {
-            proceedToAuth(false)
+            proceedToAuth(false) // Gerente/Colaborador dentro do restaurante
           } else {
             setStatus('error')
             setErrorMsg('Você não está no restaurante. Acesso negado.')
