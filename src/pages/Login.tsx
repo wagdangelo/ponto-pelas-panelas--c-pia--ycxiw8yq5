@@ -150,45 +150,43 @@ export default function Login() {
     const role = funcData?.role || ''
     const isUserAdmin = ['Admin', 'admin'].includes(role)
 
-    // 3. Valida geolocalização se não for admin
+    // 3. Se for ADMIN, pula validação de localização
     if (isUserAdmin) {
       setIsHandlingLogin(false)
       proceedToAuth(true)
-    } else {
-      setStatus('locating')
-      try {
-        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject, {
-            enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 0,
-          })
+      return
+    }
+
+    // 4. Se for GERENTE ou COLABORADOR, valida localização
+    setStatus('locating')
+    try {
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
         })
+      })
 
-        const distance = getDistanceInMeters(
-          position.coords.latitude,
-          position.coords.longitude,
-          TARGET_LAT,
-          TARGET_LNG,
-        )
+      const distance = getDistanceInMeters(
+        position.coords.latitude,
+        position.coords.longitude,
+        TARGET_LAT,
+        TARGET_LNG,
+      )
 
-        if (distance > MAX_DISTANCE_METERS) {
-          await signOut()
-          setIsHandlingLogin(false)
-          setStatus('error')
-          setErrorMsg(
-            `Você precisa estar no restaurante. Distância atual: ${Math.round(distance)}m.`,
-          )
-        } else {
-          setIsHandlingLogin(false)
-          proceedToAuth(false)
-        }
-      } catch (err: any) {
-        await signOut()
+      if (distance > MAX_DISTANCE_METERS) {
         setIsHandlingLogin(false)
         setStatus('error')
-        setErrorMsg('Erro de GPS: ' + (err.message || 'Não foi possível obter a localização.'))
+        setErrorMsg(`Você precisa estar no restaurante. Distância atual: ${Math.round(distance)}m.`)
+      } else {
+        setIsHandlingLogin(false)
+        proceedToAuth(false)
       }
+    } catch (err: any) {
+      setIsHandlingLogin(false)
+      setStatus('error')
+      setErrorMsg('Erro de GPS: ' + (err.message || 'Não foi possível obter a localização.'))
     }
   }
 
