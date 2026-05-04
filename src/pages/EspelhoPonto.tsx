@@ -407,13 +407,10 @@ export default function EspelhoPonto() {
         justification: adjForm.justification,
       }
 
-      const { data, error } = await supabase
-        .from('punch_adjustments')
-        .insert([payload])
-        .select()
-        .single()
+      const { data, error } = await supabase.from('punch_adjustments').insert([payload]).select()
 
       if (error) throw error
+      const profile = data?.[0]
 
       toast({
         title: 'Sucesso',
