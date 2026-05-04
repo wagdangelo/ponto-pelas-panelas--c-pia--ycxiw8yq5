@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
 
 const TARGET_LAT = -23.684315025060474
 const TARGET_LNG = -46.55300554706126
-const MAX_DISTANCE_METERS = 100
+const MAX_DISTANCE_METERS = 50
 
 type Status = 'idle' | 'locating' | 'authenticating' | 'error'
 
@@ -24,6 +24,7 @@ export default function Login() {
   const [status, setStatus] = useState<Status>('idle')
   const [errorMsg, setErrorMsg] = useState('')
   const [needsPasswordChange, setNeedsPasswordChange] = useState(false)
+  const [isHandlingLogin, setIsHandlingLogin] = useState(false)
 
   // Estados do modal de troca de senha
   const [newPassword, setNewPassword] = useState('')
@@ -52,7 +53,8 @@ export default function Login() {
     )
   }
 
-  if (session && !needsPasswordChange) {
+  // Previne redirecionamento automático enquanto o handleLogin está em execução
+  if (session && !needsPasswordChange && !isHandlingLogin) {
     if (isAdmin) {
       return <Navigate to="/dashboard" replace />
     } else {
@@ -60,27 +62,15 @@ export default function Login() {
     }
   }
 
-  const proceedToAuth = async (isUserAdmin: boolean) => {
-    setStatus('authenticating')
-    const { error } = await signIn(email, password)
-
-    if (error) {
-      setStatus('error')
-      if (error.message.includes('Invalid login credentials')) {
-        setErrorMsg('Email ou senha incorretos.')
-      } else {
-        setErrorMsg('Ocorreu um erro ao fazer login. Tente novamente.')
-      }
+  const proceedToAuth = (isUserAdmin: boolean) => {
+    if (password === '123456') {
+      setNeedsPasswordChange(true)
+      setStatus('idle')
     } else {
-      if (password === '123456') {
-        setNeedsPasswordChange(true)
-        setStatus('idle')
+      if (isUserAdmin) {
+        navigate('/dashboard', { replace: true })
       } else {
-        if (isUserAdmin) {
-          navigate('/espelho-ponto', { replace: true })
-        } else {
-          navigate('/dashboard', { replace: true })
-        }
+        navigate('/espelho-ponto', { replace: true })
       }
     }
   }
@@ -121,38 +111,85 @@ export default function Login() {
   }
 
   const handleLogin = async (e?: React.FormEvent) => {
-  e?.preventDefault()
-  if (!email || !password) return
+    e?.preventDefault()
+    if (!email || !password) return
 
-  setStatus('locating')
-  setErrorMsg('')
+    setIsHandlingLogin(true)
+    setStatus('authenticating')
+    setErrorMsg('')
 
-  let isUserAdmin = false
-  try {
-    const { data: role } = await supabase.rpc('get_user_role_by_email', { p_email: email })
-    
-    // ← ADICIONE ISTO PARA DEBUG
-    console.log('Email:', email)
-    console.log('Role retornado:', role)
-    console.log('Tipo do role:', typeof role)
-    
-    isUserAdmin = ['Admin', 'admin'].includes(role || '')
-    
-    // ← E ISTO TAMBÉM
-    console.log('isUserAdmin:', isUserAdmin)
-    
-  } catch (err) {
-    console.error('Error fetching user role:', err)
-  }
+    // 1. Faz o login primeiro
+    const { error } = await signIn(email, password)
 
-  if (isUserAdmin) {
-    console.log('Admin detectado — pulando validação de localização')
-    await proceedToAuth(true)
-  } else {
-    console.log('Não-admin detectado — validando localização')
-    // ... resto do código ...
-  }
-}
+    if (error) {
+      setIsHandlingLogin(false)
+      setStatus('error')
+      if (error.message.includes('Invalid login credentials')) {
+        setErrorMsg('Email ou senha incorretos.')
+      } else {
+        setErrorMsg('Ocorreu um erro ao fazer login. Tente novamente.')
+      }
+      return
+    }
+
+    // 2. Obtém o usuário autenticado e seu role na tabela funcionarios
+    const { data: authData } = await supabase.auth.getUser()
+    if (!authData.user) {
+      setIsHandlingLogin(false)
+      setStatus('error')
+      setErrorMsg('Erro ao obter dados do usuário.')
+      return
+    }
+
+    const { data: funcData } = await supabase
+      .from('funcionarios')
+      .select('role')
+      .eq('id', authData.user.id)
+      .single()
+
+    const role = funcData?.role || ''
+    const isUserAdmin = ['Admin', 'admin'].includes(role)
+
+    // 3. Valida geolocalização se não for admin
+    if (isUserAdmin) {
+      setIsHandlingLogin(false)
+      proceedToAuth(true)
+    } else {
+      setStatus('locating')
+      try {
+        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0,
+          })
+        })
+
+        const distance = getDistanceInMeters(
+          position.coords.latitude,
+          position.coords.longitude,
+          TARGET_LAT,
+          TARGET_LNG,
+        )
+
+        if (distance > MAX_DISTANCE_METERS) {
+          await signOut()
+          setIsHandlingLogin(false)
+          setStatus('error')
+          setErrorMsg(
+            `Você precisa estar no restaurante. Distância atual: ${Math.round(distance)}m.`,
+          )
+        } else {
+          setIsHandlingLogin(false)
+          proceedToAuth(false)
+        }
+      } catch (err: any) {
+        await signOut()
+        setIsHandlingLogin(false)
+        setStatus('error')
+        setErrorMsg('Erro de GPS: ' + (err.message || 'Não foi possível obter a localização.'))
+      }
+    }
   }
 
   const isFormValid = email.trim().length > 0 && password.trim().length > 0
