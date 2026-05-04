@@ -121,49 +121,38 @@ export default function Login() {
   }
 
   const handleLogin = async (e?: React.FormEvent) => {
-    e?.preventDefault()
-    if (!email || !password) return
+  e?.preventDefault()
+  if (!email || !password) return
 
-    setStatus('locating')
-    setErrorMsg('')
+  setStatus('locating')
+  setErrorMsg('')
 
-    let isUserAdmin = false
-    try {
-      const { data: role } = await supabase.rpc('get_user_role_by_email', { p_email: email })
-      isUserAdmin = ['Admin', 'admin'].includes(role || '') // ← MUDE AQUI
-    } catch (err) {
-      console.error('Error fetching user role:', err)
-    }
+  let isUserAdmin = false
+  try {
+    const { data: role } = await supabase.rpc('get_user_role_by_email', { p_email: email })
+    
+    // ← ADICIONE ISTO PARA DEBUG
+    console.log('Email:', email)
+    console.log('Role retornado:', role)
+    console.log('Tipo do role:', typeof role)
+    
+    isUserAdmin = ['Admin', 'admin'].includes(role || '')
+    
+    // ← E ISTO TAMBÉM
+    console.log('isUserAdmin:', isUserAdmin)
+    
+  } catch (err) {
+    console.error('Error fetching user role:', err)
+  }
 
-    if (isUserAdmin) {
-      await proceedToAuth(true) // Admin pula validação
-    } else {
-      if (!navigator.geolocation) {
-        setStatus('error')
-        setErrorMsg('Não conseguimos acessar sua localização. Ative GPS e tente novamente.')
-        return
-      }
-
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords
-          const distance = getDistanceInMeters(latitude, longitude, TARGET_LAT, TARGET_LNG)
-
-          if (distance <= MAX_DISTANCE_METERS) {
-            proceedToAuth(false) // Gerente/Colaborador dentro do restaurante
-          } else {
-            setStatus('error')
-            setErrorMsg('Você não está no restaurante. Acesso negado.')
-          }
-        },
-        (error) => {
-          console.error('Geolocation error:', error)
-          setStatus('error')
-          setErrorMsg('Não conseguimos acessar sua localização. Ative GPS e tente novamente.')
-        },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
-      )
-    }
+  if (isUserAdmin) {
+    console.log('Admin detectado — pulando validação de localização')
+    await proceedToAuth(true)
+  } else {
+    console.log('Não-admin detectado — validando localização')
+    // ... resto do código ...
+  }
+}
   }
 
   const isFormValid = email.trim().length > 0 && password.trim().length > 0
