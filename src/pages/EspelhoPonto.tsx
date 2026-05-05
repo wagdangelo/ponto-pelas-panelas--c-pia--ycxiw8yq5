@@ -1219,7 +1219,7 @@ export default function EspelhoPonto() {
           Voltar para Ponto
         </Link>
         <a
-          href="https://pelaspanelas.goskip.app/ponto"
+          href="/espelho-ponto"
           target="_blank"
           rel="noreferrer"
           className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-background/95 backdrop-blur-md border border-white/5 dark:border-white/10 shadow-lg hover:shadow-xl transition-all duration-300 text-sm font-medium hover:bg-muted"
