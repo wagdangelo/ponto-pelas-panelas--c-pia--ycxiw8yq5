@@ -460,7 +460,7 @@ export default function Dashboard() {
       </main>
 
       <a
-        href="https://pontopelaspanelas.goskip.app/espelho-ponto"
+        href="/espelho-ponto"
         target="_self"
         className="fixed bottom-5 right-5 flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors bg-background/95 backdrop-blur-md px-4 py-2.5 rounded-full border shadow-lg hover:shadow-xl z-20"
       >
