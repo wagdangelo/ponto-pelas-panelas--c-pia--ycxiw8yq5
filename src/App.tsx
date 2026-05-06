@@ -6,6 +6,7 @@ import Layout from './components/Layout'
 import NotFound from './pages/NotFound'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
+import DashboardPrincipal from './pages/DashboardPrincipal'
 import EspelhoPonto from './pages/EspelhoPonto'
 import Colaboradores from './pages/Colaboradores'
 import Ponto from './pages/Ponto'
@@ -42,6 +43,14 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-principal"
+          element={
+            <ProtectedRoute>
+              <DashboardPrincipal />
             </ProtectedRoute>
           }
         />

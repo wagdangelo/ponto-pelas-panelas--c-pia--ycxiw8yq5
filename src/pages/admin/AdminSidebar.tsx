@@ -1,14 +1,18 @@
-import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard,
+  BarChart3,
   Users,
-  UserPlus,
   Briefcase,
-  Calendar,
-  FileText,
-  LogOut,
+  CheckSquare,
   Clock,
+  Calendar,
+  DollarSign,
+  FileText,
+  Star,
+  Gift,
+  LogOut,
+  Fingerprint,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -22,14 +26,12 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from '@/components/ui/sidebar'
-import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/use-auth'
-import { InviteModal } from './InviteModal'
 
 export function AdminSidebar() {
   const { signOut } = useAuth()
   const navigate = useNavigate()
-  const [isInviteOpen, setIsInviteOpen] = useState(false)
+  const location = useLocation()
 
   const handleSignOut = async () => {
     await signOut()
@@ -37,107 +39,218 @@ export function AdminSidebar() {
   }
 
   return (
-    <>
-      <Sidebar className="border-r shadow-sm">
-        <SidebarHeader className="p-4">
-          <Button
-            onClick={() => setIsInviteOpen(true)}
-            className="w-full flex items-center justify-center gap-2 shadow-sm font-semibold rounded-xl"
-          >
-            <UserPlus size={18} />
-            Convidar
-          </Button>
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel className="text-xs">Principal</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    tooltip="Colaboradores"
-                    className="rounded-lg"
-                    onClick={() => navigate('/colaboradores')}
-                  >
+    <Sidebar className="border-r shadow-sm">
+      <SidebarHeader className="p-4 flex items-center justify-center border-b">
+        <div className="flex items-center gap-3 font-bold text-lg text-primary w-full px-2">
+          <img
+            src="https://img.usecurling.com/i?q=pan&color=orange&shape=fill"
+            alt="Pelas Panelas"
+            className="w-8 h-8 rounded-md"
+          />
+          <span className="truncate">Pelas Panelas</span>
+        </div>
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground mt-2">
+            Dashboard
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={location.pathname === '/dashboard-principal'}
+                  tooltip="Principal"
+                >
+                  <Link to="/dashboard-principal">
+                    <LayoutDashboard />
+                    <span>Principal</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={location.pathname === '/desempenho'}
+                  tooltip="Desempenho"
+                >
+                  <Link to="/desempenho">
+                    <BarChart3 />
+                    <span>Desempenho</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground">
+            Cadastros
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={location.pathname === '/colaboradores'}
+                  tooltip="Colaboradores"
+                >
+                  <Link to="/colaboradores">
                     <Users />
                     <span>Colaboradores</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>{' '}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-          <SidebarGroup>
-            <SidebarGroupLabel className="text-xs">Gestão</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild tooltip="Colaboradores" className="rounded-lg">
-                    <Link to="/colaboradores">
-                      <Users />
-                      <span>Colaboradores</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton tooltip="Recrutamento" className="rounded-lg">
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={location.pathname === '/cargos-funcoes'}
+                  tooltip="Cargos e Funções"
+                >
+                  <Link to="/cargos-funcoes">
                     <Briefcase />
-                    <span>Recrutamento</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-          <SidebarGroup>
-            <SidebarGroupLabel className="text-xs">Operacional</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton tooltip="Ponto" className="rounded-lg">
+                    <span>Cargos e Funções</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={location.pathname === '/tarefas'}
+                  tooltip="Tarefas"
+                >
+                  <Link to="/tarefas">
+                    <CheckSquare />
+                    <span>Tarefas</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground">
+            Operacional
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={location.pathname === '/espelho-ponto'}
+                  tooltip="Registros de Ponto"
+                >
+                  <Link to="/espelho-ponto">
                     <Clock />
-                    <span>Ponto</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton tooltip="Férias" className="rounded-lg">
+                    <span>Registros de Ponto</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={location.pathname === '/ferias'}
+                  tooltip="Registro de Férias"
+                >
+                  <Link to="/ferias">
                     <Calendar />
-                    <span>Férias</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-          <SidebarGroup>
-            <SidebarGroupLabel className="text-xs">Histórico</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton tooltip="Avaliações" className="rounded-lg">
+                    <span>Registro de Férias</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={location.pathname === '/folha-pagamento'}
+                  tooltip="Folha de Pagamento"
+                >
+                  <Link to="/folha-pagamento">
+                    <DollarSign />
+                    <span>Folha de Pagamento</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground">
+            Histórico
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={location.pathname === '/relatorios'}
+                  tooltip="Relatórios"
+                >
+                  <Link to="/relatorios">
                     <FileText />
+                    <span>Relatórios</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={location.pathname === '/avaliacoes'}
+                  tooltip="Avaliações"
+                >
+                  <Link to="/avaliacoes">
+                    <Star />
                     <span>Avaliações</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarContent>
-        <SidebarFooter className="p-4 border-t bg-muted/20">
-          <div className="mb-3 px-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center justify-between">
-            <span>Acesso:</span>
-            <span className="bg-primary/10 text-primary px-2 py-0.5 rounded text-[10px]">
-              Admin
-            </span>
-          </div>
-          <Button
-            variant="ghost"
-            className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10 font-medium rounded-lg"
-            onClick={handleSignOut}
-          >
-            <LogOut size={18} className="mr-2" />
-            Sair
-          </Button>
-        </SidebarFooter>
-      </Sidebar>
-      <InviteModal open={isInviteOpen} onOpenChange={setIsInviteOpen} />
-    </>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={location.pathname === '/bonificacoes'}
+                  tooltip="Bonificações"
+                >
+                  <Link to="/bonificacoes">
+                    <Gift />
+                    <span>Bonificações</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+
+      <SidebarFooter className="p-4 border-t bg-muted/20">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              isActive={location.pathname === '/ponto'}
+              tooltip="Acessar Ponto"
+              className="font-semibold text-primary hover:text-primary"
+            >
+              <Link to="/ponto">
+                <Fingerprint />
+                <span>Acessar Ponto</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              tooltip="Sair"
+              className="text-destructive hover:text-destructive hover:bg-destructive/10 font-semibold"
+              onClick={handleSignOut}
+            >
+              <LogOut />
+              <span>Sair</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+    </Sidebar>
   )
 }
