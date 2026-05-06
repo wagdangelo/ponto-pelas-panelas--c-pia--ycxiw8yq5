@@ -1,11 +1,17 @@
 // AVOID UPDATING THIS FILE DIRECTLY. It is automatically generated.
-export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
 
 export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: '14.5'
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -51,55 +57,100 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'avisos_criado_por_fkey'
-            columns: ['criado_por']
+            foreignKeyName: "avisos_criado_por_fkey"
+            columns: ["criado_por"]
             isOneToOne: false
-            referencedRelation: 'funcionarios'
-            referencedColumns: ['id']
+            referencedRelation: "funcionarios"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'avisos_funcionario_id_fkey'
-            columns: ['funcionario_id']
+            foreignKeyName: "avisos_funcionario_id_fkey"
+            columns: ["funcionario_id"]
             isOneToOne: false
-            referencedRelation: 'funcionarios'
-            referencedColumns: ['id']
+            referencedRelation: "funcionarios"
+            referencedColumns: ["id"]
           },
         ]
       }
       funcionarios: {
         Row: {
           ativo: boolean | null
+          bairro: string | null
           cargo: string | null
+          cep: string | null
+          cidade: string | null
+          complemento: string | null
+          cpf: string | null
           created_at: string | null
           data_admissao: string | null
+          data_nascimento: string | null
+          documentos: Json | null
           email: string | null
+          foto_url: string | null
+          horarios: Json | null
           id: string
           nome: string | null
+          numero: string | null
           role: string | null
+          rua: string | null
+          salario_base: number | null
+          status: string | null
+          telefone: string | null
+          tipo_contrato: string | null
           turno: string | null
           updated_at: string | null
         }
         Insert: {
           ativo?: boolean | null
+          bairro?: string | null
           cargo?: string | null
+          cep?: string | null
+          cidade?: string | null
+          complemento?: string | null
+          cpf?: string | null
           created_at?: string | null
           data_admissao?: string | null
+          data_nascimento?: string | null
+          documentos?: Json | null
           email?: string | null
+          foto_url?: string | null
+          horarios?: Json | null
           id: string
           nome?: string | null
+          numero?: string | null
           role?: string | null
+          rua?: string | null
+          salario_base?: number | null
+          status?: string | null
+          telefone?: string | null
+          tipo_contrato?: string | null
           turno?: string | null
           updated_at?: string | null
         }
         Update: {
           ativo?: boolean | null
+          bairro?: string | null
           cargo?: string | null
+          cep?: string | null
+          cidade?: string | null
+          complemento?: string | null
+          cpf?: string | null
           created_at?: string | null
           data_admissao?: string | null
+          data_nascimento?: string | null
+          documentos?: Json | null
           email?: string | null
+          foto_url?: string | null
+          horarios?: Json | null
           id?: string
           nome?: string | null
+          numero?: string | null
           role?: string | null
+          rua?: string | null
+          salario_base?: number | null
+          status?: string | null
+          telefone?: string | null
+          tipo_contrato?: string | null
           turno?: string | null
           updated_at?: string | null
         }
@@ -171,18 +222,62 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'pontos_funcionario_id_fkey'
-            columns: ['funcionario_id']
+            foreignKeyName: "pontos_funcionario_id_fkey"
+            columns: ["funcionario_id"]
             isOneToOne: false
-            referencedRelation: 'funcionarios'
-            referencedColumns: ['id']
+            referencedRelation: "funcionarios"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'pontos_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "pontos_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'funcionarios'
-            referencedColumns: ['id']
+            referencedRelation: "funcionarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pontos_diarios: {
+        Row: {
+          created_at: string
+          data: string
+          entrada: string | null
+          funcionario_id: string
+          id: string
+          retorno_almoco: string | null
+          saida: string | null
+          saida_almoco: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          data: string
+          entrada?: string | null
+          funcionario_id: string
+          id?: string
+          retorno_almoco?: string | null
+          saida?: string | null
+          saida_almoco?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          data?: string
+          entrada?: string | null
+          funcionario_id?: string
+          id?: string
+          retorno_almoco?: string | null
+          saida?: string | null
+          saida_almoco?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pontos_diarios_funcionario_id_fkey"
+            columns: ["funcionario_id"]
+            isOneToOne: false
+            referencedRelation: "funcionarios"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -191,8 +286,12 @@ export type Database = {
           approved_at: string | null
           approved_by: string | null
           created_at: string | null
+          data: string | null
+          funcionario_id: string | null
+          horario_solicitado: string | null
           id: string
           justification: string | null
+          motivo: string | null
           nsr: number
           punch_date: string | null
           punch_lunch_in: string | null
@@ -200,6 +299,7 @@ export type Database = {
           punch_time_in: string | null
           punch_time_out: string | null
           status: string | null
+          tipo_ponto: string | null
           updated_at: string | null
           user_id: string | null
         }
@@ -207,8 +307,12 @@ export type Database = {
           approved_at?: string | null
           approved_by?: string | null
           created_at?: string | null
+          data?: string | null
+          funcionario_id?: string | null
+          horario_solicitado?: string | null
           id?: string
           justification?: string | null
+          motivo?: string | null
           nsr?: number
           punch_date?: string | null
           punch_lunch_in?: string | null
@@ -216,6 +320,7 @@ export type Database = {
           punch_time_in?: string | null
           punch_time_out?: string | null
           status?: string | null
+          tipo_ponto?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
@@ -223,8 +328,12 @@ export type Database = {
           approved_at?: string | null
           approved_by?: string | null
           created_at?: string | null
+          data?: string | null
+          funcionario_id?: string | null
+          horario_solicitado?: string | null
           id?: string
           justification?: string | null
+          motivo?: string | null
           nsr?: number
           punch_date?: string | null
           punch_lunch_in?: string | null
@@ -232,23 +341,31 @@ export type Database = {
           punch_time_in?: string | null
           punch_time_out?: string | null
           status?: string | null
+          tipo_ponto?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: 'punch_adjustments_approved_by_fkey'
-            columns: ['approved_by']
+            foreignKeyName: "punch_adjustments_approved_by_fkey"
+            columns: ["approved_by"]
             isOneToOne: false
-            referencedRelation: 'funcionarios'
-            referencedColumns: ['id']
+            referencedRelation: "funcionarios"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'punch_adjustments_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "punch_adjustments_funcionario_id_fkey"
+            columns: ["funcionario_id"]
             isOneToOne: false
-            referencedRelation: 'funcionarios'
-            referencedColumns: ['id']
+            referencedRelation: "funcionarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "punch_adjustments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "funcionarios"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -268,31 +385,33 @@ export type Database = {
   }
 }
 
-type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, 'public'>]
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
-    ? (DefaultSchema['Tables'] & DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -301,23 +420,23 @@ export type Tables<
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -326,23 +445,23 @@ export type TablesInsert<
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -351,36 +470,36 @@ export type TablesUpdate<
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema['Enums']
+    | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
-    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema['CompositeTypes']
+    | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
-    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
 
 export const Constants = {
@@ -388,6 +507,7 @@ export const Constants = {
     Enums: {},
   },
 } as const
+
 
 // ====== DATABASE EXTENDED CONTEXT (auto-generated) ======
 // This section contains actual PostgreSQL column types, constraints, RLS policies,
@@ -422,6 +542,21 @@ export const Constants = {
 //   ativo: boolean (nullable, default: true)
 //   created_at: timestamp with time zone (nullable, default: now())
 //   updated_at: timestamp with time zone (nullable, default: now())
+//   data_nascimento: date (nullable)
+//   cpf: text (nullable)
+//   telefone: text (nullable)
+//   cep: text (nullable)
+//   rua: text (nullable)
+//   numero: text (nullable)
+//   complemento: text (nullable)
+//   bairro: text (nullable)
+//   cidade: text (nullable)
+//   salario_base: numeric (nullable)
+//   tipo_contrato: text (nullable)
+//   status: text (nullable, default: 'Ativo'::text)
+//   horarios: jsonb (nullable, default: '{}'::jsonb)
+//   documentos: jsonb (nullable, default: '{}'::jsonb)
+//   foto_url: text (nullable)
 // Table: pontos
 //   id: uuid (not null, default: gen_random_uuid())
 //   user_id: uuid (nullable)
@@ -442,6 +577,16 @@ export const Constants = {
 //   status_validacao: text (nullable)
 //   wifi_conectado: boolean (nullable)
 //   nsr: bigint (not null, default: nextval('pontos_nsr_seq'::regclass))
+// Table: pontos_diarios
+//   id: uuid (not null, default: gen_random_uuid())
+//   funcionario_id: uuid (not null)
+//   data: date (not null)
+//   entrada: text (nullable)
+//   saida_almoco: text (nullable)
+//   retorno_almoco: text (nullable)
+//   saida: text (nullable)
+//   created_at: timestamp with time zone (not null, default: now())
+//   updated_at: timestamp with time zone (not null, default: now())
 // Table: punch_adjustments
 //   id: uuid (not null, default: gen_random_uuid())
 //   user_id: uuid (nullable)
@@ -457,6 +602,11 @@ export const Constants = {
 //   approved_at: timestamp with time zone (nullable)
 //   created_at: timestamp with time zone (nullable, default: now())
 //   updated_at: timestamp with time zone (nullable, default: now())
+//   funcionario_id: uuid (nullable)
+//   data: date (nullable)
+//   tipo_ponto: text (nullable)
+//   horario_solicitado: text (nullable)
+//   motivo: text (nullable)
 
 // --- CONSTRAINTS ---
 // Table: avisos
@@ -464,6 +614,7 @@ export const Constants = {
 //   FOREIGN KEY avisos_funcionario_id_fkey: FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id) ON DELETE CASCADE
 //   PRIMARY KEY avisos_pkey: PRIMARY KEY (id)
 // Table: funcionarios
+//   UNIQUE funcionarios_cpf_key: UNIQUE (cpf)
 //   UNIQUE funcionarios_email_key: UNIQUE (email)
 //   FOREIGN KEY funcionarios_id_fkey: FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE
 //   PRIMARY KEY funcionarios_pkey: PRIMARY KEY (id)
@@ -472,8 +623,13 @@ export const Constants = {
 //   UNIQUE pontos_nsr_key: UNIQUE (nsr)
 //   PRIMARY KEY pontos_pkey: PRIMARY KEY (id)
 //   FOREIGN KEY pontos_user_id_fkey: FOREIGN KEY (user_id) REFERENCES funcionarios(id) ON DELETE CASCADE
+// Table: pontos_diarios
+//   UNIQUE pontos_diarios_funcionario_id_data_key: UNIQUE (funcionario_id, data)
+//   FOREIGN KEY pontos_diarios_funcionario_id_fkey: FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id) ON DELETE CASCADE
+//   PRIMARY KEY pontos_diarios_pkey: PRIMARY KEY (id)
 // Table: punch_adjustments
 //   FOREIGN KEY punch_adjustments_approved_by_fkey: FOREIGN KEY (approved_by) REFERENCES funcionarios(id) ON DELETE SET NULL
+//   FOREIGN KEY punch_adjustments_funcionario_id_fkey: FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
 //   UNIQUE punch_adjustments_nsr_key: UNIQUE (nsr)
 //   PRIMARY KEY punch_adjustments_pkey: PRIMARY KEY (id)
 //   FOREIGN KEY punch_adjustments_user_id_fkey: FOREIGN KEY (user_id) REFERENCES funcionarios(id) ON DELETE CASCADE
@@ -506,15 +662,26 @@ export const Constants = {
 //     USING: ((user_id = auth.uid()) OR (funcionario_id = auth.uid()) OR is_user_admin())
 //   Policy "Pontos Update" (UPDATE, PERMISSIVE) roles={authenticated}
 //     USING: ((user_id = auth.uid()) OR (funcionario_id = auth.uid()) OR is_user_admin())
+// Table: pontos_diarios
+//   Policy "pontos_diarios_all" (ALL, PERMISSIVE) roles={authenticated}
+//     USING: is_user_admin()
+//   Policy "pontos_diarios_select" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: ((funcionario_id = auth.uid()) OR is_user_admin())
 // Table: punch_adjustments
 //   Policy "Ajustes Delete" (DELETE, PERMISSIVE) roles={authenticated}
 //     USING: is_user_admin()
 //   Policy "Ajustes Insert" (INSERT, PERMISSIVE) roles={authenticated}
 //     WITH CHECK: ((user_id = auth.uid()) OR is_user_admin())
+//   Policy "Ajustes Insert Funcionario" (INSERT, PERMISSIVE) roles={authenticated}
+//     WITH CHECK: ((funcionario_id = auth.uid()) OR is_user_admin())
 //   Policy "Ajustes Select" (SELECT, PERMISSIVE) roles={authenticated}
 //     USING: ((user_id = auth.uid()) OR is_user_admin())
+//   Policy "Ajustes Select Funcionario" (SELECT, PERMISSIVE) roles={authenticated}
+//     USING: ((funcionario_id = auth.uid()) OR is_user_admin())
 //   Policy "Ajustes Update" (UPDATE, PERMISSIVE) roles={authenticated}
 //     USING: ((user_id = auth.uid()) OR is_user_admin())
+//   Policy "Ajustes Update Funcionario" (UPDATE, PERMISSIVE) roles={authenticated}
+//     USING: ((funcionario_id = auth.uid()) OR is_user_admin())
 
 // --- DATABASE FUNCTIONS ---
 // FUNCTION is_user_admin()
@@ -528,7 +695,7 @@ export const Constants = {
 //       SELECT 1 FROM funcionarios WHERE id = auth.uid() AND role IN ('admin', 'gerente', 'Admin', 'Gerente')
 //     );
 //   $function$
-//
+//   
 // FUNCTION rls_auto_enable()
 //   CREATE OR REPLACE FUNCTION public.rls_auto_enable()
 //    RETURNS event_trigger
@@ -559,12 +726,46 @@ export const Constants = {
 //     END LOOP;
 //   END;
 //   $function$
-//
+//   
+// FUNCTION sync_pontos_diarios()
+//   CREATE OR REPLACE FUNCTION public.sync_pontos_diarios()
+//    RETURNS trigger
+//    LANGUAGE plpgsql
+//    SECURITY DEFINER
+//   AS $function$
+//   BEGIN
+//     INSERT INTO public.pontos_diarios (funcionario_id, data, entrada, saida_almoco, retorno_almoco, saida)
+//     VALUES (
+//       NEW.funcionario_id,
+//       NEW.data,
+//       CASE WHEN NEW.tipo_ponto IN ('Entrada', 'entrada') THEN NEW.horario ELSE NULL END,
+//       CASE WHEN NEW.tipo_ponto IN ('Saída Almoço', 'Saida Almoço', 'saida_almoco') THEN NEW.horario ELSE NULL END,
+//       CASE WHEN NEW.tipo_ponto IN ('Retorno Almoço', 'retorno_almoco') THEN NEW.horario ELSE NULL END,
+//       CASE WHEN NEW.tipo_ponto IN ('Saída', 'Saida', 'saida') THEN NEW.horario ELSE NULL END
+//     )
+//     ON CONFLICT (funcionario_id, data) DO UPDATE SET
+//       entrada = COALESCE(EXCLUDED.entrada, public.pontos_diarios.entrada),
+//       saida_almoco = COALESCE(EXCLUDED.saida_almoco, public.pontos_diarios.saida_almoco),
+//       retorno_almoco = COALESCE(EXCLUDED.retorno_almoco, public.pontos_diarios.retorno_almoco),
+//       saida = COALESCE(EXCLUDED.saida, public.pontos_diarios.saida),
+//       updated_at = NOW();
+//     RETURN NEW;
+//   END;
+//   $function$
+//   
+
+// --- TRIGGERS ---
+// Table: pontos
+//   trigger_sync_pontos_diarios: CREATE TRIGGER trigger_sync_pontos_diarios AFTER INSERT OR UPDATE ON public.pontos FOR EACH ROW EXECUTE FUNCTION sync_pontos_diarios()
 
 // --- INDEXES ---
 // Table: funcionarios
+//   CREATE UNIQUE INDEX funcionarios_cpf_key ON public.funcionarios USING btree (cpf)
 //   CREATE UNIQUE INDEX funcionarios_email_key ON public.funcionarios USING btree (email)
 // Table: pontos
 //   CREATE UNIQUE INDEX pontos_nsr_key ON public.pontos USING btree (nsr)
+// Table: pontos_diarios
+//   CREATE UNIQUE INDEX pontos_diarios_funcionario_id_data_key ON public.pontos_diarios USING btree (funcionario_id, data)
 // Table: punch_adjustments
 //   CREATE UNIQUE INDEX punch_adjustments_nsr_key ON public.punch_adjustments USING btree (nsr)
+

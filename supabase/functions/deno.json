@@ -1,10 +1,10 @@
 {
   "_versions": {
-    "ifoodWebhook": 2,
+    "ifoodWebhook": 3,
     "manageUsers": 6,
-    "parse-ofx": 2,
+    "parse-ofx": 3,
     "recalculate-bank-balance": 2,
-    "setFirstPassword": 2,
+    "setFirstPassword": 3,
     "sync-ifood-orders": 2
   }
 }
