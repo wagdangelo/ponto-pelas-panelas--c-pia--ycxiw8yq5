@@ -54,27 +54,9 @@ Deno.serve(async (req: Request) => {
     switch (action) {
       case 'create': {
         const {
-          nome,
-          email,
-          password,
-          role,
-          cpf,
-          telefone,
-          data_nascimento,
-          cargo,
-          turno,
-          data_admissao,
-          salario_base,
-          cep,
-          rua,
-          numero,
-          complemento,
-          bairro,
-          cidade,
-          tipo_contrato,
-          status,
-          horarios,
-          documentos,
+          nome, email, password, role, cpf, telefone, data_nascimento,
+          cargo, turno, data_admissao, salario_base, cep, rua, numero,
+          complemento, bairro, cidade, tipo_contrato, status, horarios, documentos
         } = payload
 
         const { data: authData, error: createError } = await supabaseAdmin.auth.admin.createUser({
@@ -109,7 +91,7 @@ Deno.serve(async (req: Request) => {
               tipo_contrato,
               status: status || 'Ativo',
               horarios,
-              documentos,
+              documentos
             },
             { onConflict: 'id' },
           )
@@ -142,28 +124,9 @@ Deno.serve(async (req: Request) => {
       }
       case 'update': {
         const {
-          id,
-          nome,
-          email,
-          password,
-          role,
-          cpf,
-          telefone,
-          data_nascimento,
-          cargo,
-          turno,
-          data_admissao,
-          salario_base,
-          cep,
-          rua,
-          numero,
-          complemento,
-          bairro,
-          cidade,
-          tipo_contrato,
-          status,
-          horarios,
-          documentos,
+          id, nome, email, password, role, cpf, telefone, data_nascimento,
+          cargo, turno, data_admissao, salario_base, cep, rua, numero,
+          complemento, bairro, cidade, tipo_contrato, status, horarios, documentos
         } = payload
 
         const authUpdates: any = {}
@@ -219,9 +182,9 @@ Deno.serve(async (req: Request) => {
 
         const { error } = await supabaseAdmin.auth.admin.deleteUser(id)
         if (error) {
-          console.warn('Failed to delete user from auth, attempting direct deletion')
+           console.warn("Failed to delete user from auth, attempting direct deletion")
         }
-
+        
         const { error: dbError } = await supabaseAdmin.from('funcionarios').delete().eq('id', id)
         if (dbError) throw dbError
         result = { deletedId: id }
