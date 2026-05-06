@@ -7,7 +7,9 @@ import NotFound from './pages/NotFound'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import EspelhoPonto from './pages/EspelhoPonto'
+import Colaboradores from './pages/Colaboradores'
 import Ponto from './pages/Ponto'
+import Colaboradores from './pages/Colaboradores'
 import { AuthProvider, useAuth } from './hooks/use-auth'
 import { Loader2 } from 'lucide-react'
 import { ErrorBoundary } from './components/ErrorBoundary'
@@ -45,6 +47,14 @@ const AppRoutes = () => {
           }
         />
         <Route
+          path="/colaboradores"
+          element={
+            <ProtectedRoute>
+              <Colaboradores />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/espelho-ponto"
           element={
             <ProtectedRoute>
@@ -57,6 +67,14 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <Ponto />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/colaboradores"
+          element={
+            <ProtectedRoute>
+              <Colaboradores />
             </ProtectedRoute>
           }
         />

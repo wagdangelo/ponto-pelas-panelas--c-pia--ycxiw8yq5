@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import {
   LayoutDashboard,
   Users,
@@ -54,11 +54,15 @@ export function AdminSidebar() {
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton isActive tooltip="Dashboard" className="rounded-lg">
-                    <LayoutDashboard />
-                    <span>Dashboard</span>
+                  <SidebarMenuButton
+                    tooltip="Colaboradores"
+                    className="rounded-lg"
+                    onClick={() => navigate('/colaboradores')}
+                  >
+                    <Users />
+                    <span>Colaboradores</span>
                   </SidebarMenuButton>
-                </SidebarMenuItem>
+                </SidebarMenuItem>{' '}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
@@ -67,9 +71,11 @@ export function AdminSidebar() {
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton tooltip="Colaboradores" className="rounded-lg">
-                    <Users />
-                    <span>Colaboradores</span>
+                  <SidebarMenuButton asChild tooltip="Colaboradores" className="rounded-lg">
+                    <Link to="/colaboradores">
+                      <Users />
+                      <span>Colaboradores</span>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>

@@ -39,7 +39,7 @@ Deno.serve(async (req: Request) => {
     const { data: profile } = await supabaseAdmin
       .from('funcionarios')
       .select('role')
-      .eq('email', user.email)
+      .eq('id', user.id)
       .single()
 
     if (!['Admin', 'Adm', 'Gerente', 'RH'].includes(profile?.role || '')) {
@@ -54,7 +54,7 @@ Deno.serve(async (req: Request) => {
     switch (action) {
       case 'create': {
         const {
-          name,
+          nome,
           email,
           password,
           role,
@@ -64,17 +64,24 @@ Deno.serve(async (req: Request) => {
           cargo,
           turno,
           data_admissao,
-          salario,
-          vale_transporte,
-          endereco,
-          escala_turnos,
+          salario_base,
+          cep,
+          rua,
+          numero,
+          complemento,
+          bairro,
+          cidade,
+          tipo_contrato,
+          status,
+          horarios,
+          documentos,
         } = payload
 
         const { data: authData, error: createError } = await supabaseAdmin.auth.admin.createUser({
           email,
           password: password || 'Password123!',
           email_confirm: true,
-          user_metadata: { name },
+          user_metadata: { name: nome },
         })
         if (createError) throw createError
 
@@ -84,7 +91,7 @@ Deno.serve(async (req: Request) => {
             {
               id: authData.user.id,
               email,
-              nome: name,
+              nome,
               role: role || 'Colaborador',
               cpf,
               telefone,
@@ -92,18 +99,25 @@ Deno.serve(async (req: Request) => {
               cargo,
               turno,
               data_admissao,
-              salario,
-              vale_transporte,
-              endereco,
-              escala_turnos,
+              salario_base,
+              cep,
+              rua,
+              numero,
+              complemento,
+              bairro,
+              cidade,
+              tipo_contrato,
+              status: status || 'Ativo',
+              horarios,
+              documentos,
             },
-            { onConflict: 'email' },
+            { onConflict: 'id' },
           )
           .select()
           .single()
 
         if (profileError) throw profileError
-        result = { ...profileData, name: profileData.nome }
+        result = profileData
         break
       }
       case 'read': {
@@ -115,21 +129,21 @@ Deno.serve(async (req: Request) => {
             .eq('id', id)
             .single()
           if (error) throw error
-          result = { ...data, name: data.nome }
+          result = data
         } else {
           const { data, error } = await supabaseAdmin
             .from('funcionarios')
             .select('*')
             .order('nome', { ascending: true })
           if (error) throw error
-          result = data.map((item: any) => ({ ...item, name: item.nome }))
+          result = data
         }
         break
       }
       case 'update': {
         const {
           id,
-          name,
+          nome,
           email,
           password,
           role,
@@ -139,15 +153,23 @@ Deno.serve(async (req: Request) => {
           cargo,
           turno,
           data_admissao,
-          salario,
-          vale_transporte,
-          endereco,
-          escala_turnos,
+          salario_base,
+          cep,
+          rua,
+          numero,
+          complemento,
+          bairro,
+          cidade,
+          tipo_contrato,
+          status,
+          horarios,
+          documentos,
         } = payload
 
         const authUpdates: any = {}
         if (email) authUpdates.email = email
         if (password) authUpdates.password = password
+        if (nome) authUpdates.user_metadata = { name: nome }
 
         if (Object.keys(authUpdates).length > 0) {
           const { error: updateAuthError } = await supabaseAdmin.auth.admin.updateUserById(
@@ -155,21 +177,12 @@ Deno.serve(async (req: Request) => {
             authUpdates,
           )
           if (updateAuthError) {
-            if (
-              updateAuthError.message.includes('User not found') ||
-              updateAuthError.status === 404
-            ) {
-              console.warn(
-                `Aviso: Usuário ${id} não encontrado no auth.users. Atualizando apenas a tabela funcionarios.`,
-              )
-            } else {
-              throw updateAuthError
-            }
+            console.warn(`Aviso: Falha ao atualizar auth.users - ${updateAuthError.message}`)
           }
         }
 
         const updateDataFunc: any = {}
-        if (name !== undefined) updateDataFunc.nome = name
+        if (nome !== undefined) updateDataFunc.nome = nome
         if (email !== undefined) updateDataFunc.email = email
         if (role !== undefined) updateDataFunc.role = role
         if (cpf !== undefined) updateDataFunc.cpf = cpf
@@ -178,10 +191,17 @@ Deno.serve(async (req: Request) => {
         if (cargo !== undefined) updateDataFunc.cargo = cargo
         if (turno !== undefined) updateDataFunc.turno = turno
         if (data_admissao !== undefined) updateDataFunc.data_admissao = data_admissao
-        if (salario !== undefined) updateDataFunc.salario = salario
-        if (vale_transporte !== undefined) updateDataFunc.vale_transporte = vale_transporte
-        if (endereco !== undefined) updateDataFunc.endereco = endereco
-        if (escala_turnos !== undefined) updateDataFunc.escala_turnos = escala_turnos
+        if (salario_base !== undefined) updateDataFunc.salario_base = salario_base
+        if (cep !== undefined) updateDataFunc.cep = cep
+        if (rua !== undefined) updateDataFunc.rua = rua
+        if (numero !== undefined) updateDataFunc.numero = numero
+        if (complemento !== undefined) updateDataFunc.complemento = complemento
+        if (bairro !== undefined) updateDataFunc.bairro = bairro
+        if (cidade !== undefined) updateDataFunc.cidade = cidade
+        if (tipo_contrato !== undefined) updateDataFunc.tipo_contrato = tipo_contrato
+        if (status !== undefined) updateDataFunc.status = status
+        if (horarios !== undefined) updateDataFunc.horarios = horarios
+        if (documentos !== undefined) updateDataFunc.documentos = documentos
 
         const { data, error } = await supabaseAdmin
           .from('funcionarios')
@@ -191,27 +211,19 @@ Deno.serve(async (req: Request) => {
           .single()
 
         if (error) throw error
-        result = { ...data, name: data.nome }
+        result = data
         break
       }
       case 'delete': {
         const { id } = payload
 
-        const { data: funcData } = await supabaseAdmin
-          .from('funcionarios')
-          .select('email')
-          .eq('id', id)
-          .single()
-        if (funcData?.email) {
-          const { data: users } = await supabaseAdmin.auth.admin.listUsers()
-          const authUser = users.users.find((u) => u.email === funcData.email)
-          if (authUser) {
-            await supabaseAdmin.auth.admin.deleteUser(authUser.id)
-          }
+        const { error } = await supabaseAdmin.auth.admin.deleteUser(id)
+        if (error) {
+          console.warn('Failed to delete user from auth, attempting direct deletion')
         }
 
-        const { error } = await supabaseAdmin.from('funcionarios').delete().eq('id', id)
-        if (error) throw error
+        const { error: dbError } = await supabaseAdmin.from('funcionarios').delete().eq('id', id)
+        if (dbError) throw dbError
         result = { deletedId: id }
         break
       }
